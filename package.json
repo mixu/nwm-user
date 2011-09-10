@@ -1,0 +1,18 @@
+{
+  "name": "nwm-user",
+  "description": "User configuration for nwm, the node window manager",
+  "version": "0.0.1",
+  "author": {
+    "name": "Mikito Takada",
+    "email": "mixu@mixu.net",
+    "url": "http://blog.mixu.net/"
+    },
+  "keywords": ["nwm", "window manager", "X11"],
+  "repository": "git://github.com/mixu/nwm-user",
+  "main": "index.js",
+  "dependencies": {
+    "nwm": "latest",
+    "webrepl": "0.4.x"
+  },
+  "private": true
+}
