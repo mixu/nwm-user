@@ -7,15 +7,8 @@ var webrepl = require('webrepl');
 // instantiate nwm and configure it
 var nwm = new NWM();
 
-// LAYOUTS: add layouts from external hash/object
-var layouts = require('nwm').default_layouts;
-Object.keys(layouts).forEach(function(name){
-  var callback = layouts[name];
-  nwm.addLayout(name, layouts[name]);
-});
-
 // KEYBOARD SHORTCUTS
-var baseModifier = Xh.Mod4Mask; // to make it easier to reassign the "base" modifier combination
+var baseModifier = ( process.env.DISPLAY && process.env.DISPLAY == ':1' ? Xh.Mod4Mask|Xh.ControlMask : Xh.Mod4Mask); // to make it easier to reassign the "base" modifier combination
 // Workspace management - since we do the same thing for keys 0..9, use an array
 [XK.XK_1, XK.XK_2, XK.XK_3, XK.XK_4, XK.XK_5, XK.XK_6, XK.XK_7, XK.XK_8, XK.XK_9].forEach(function(key) {
   // workspace switching
@@ -111,6 +104,20 @@ nwm.addKey({ key: XK.XK_m, modifier: baseModifier }, function() {
 nwm.addKey({ key: XK.XK_j, modifier: baseModifier }, function() {});
 // TODO: graceful shutdown
 nwm.addKey({ key: XK.XK_q, modifier: baseModifier|Xh.ShiftMask }, function() {});
+
+// HOT LOAD
+// Load all files in ./layouts and watch it for changes
+nwm.hotLoad(__dirname+'/layouts/tile.js');
+nwm.hotLoad(__dirname+'/layouts/grid.js');
+
+// LAYOUTS: add layouts from external hash/object
+/*
+var layouts = require('nwm').default_layouts;
+Object.keys(layouts).forEach(function(name){
+  var callback = layouts[name];
+  nwm.addLayout(name, layouts[name]);
+});
+*/
 
 // START
 nwm.start(function() {
