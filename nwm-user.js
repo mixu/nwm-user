@@ -110,15 +110,6 @@ nwm.addKey({ key: XK.XK_q, modifier: baseModifier|Xh.ShiftMask }, function() {})
 nwm.hotLoad(__dirname+'/layouts/tile.js');
 nwm.hotLoad(__dirname+'/layouts/grid.js');
 
-// LAYOUTS: add layouts from external hash/object
-/*
-var layouts = require('nwm').default_layouts;
-Object.keys(layouts).forEach(function(name){
-  var callback = layouts[name];
-  nwm.addLayout(name, layouts[name]);
-});
-*/
-
 // START
 nwm.start(function() {
   // Expose via stdout
