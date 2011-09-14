@@ -61,13 +61,13 @@ function tile(workspace) {
   }
   var mainId = workspace.getMainWindow();
   if(Object.keys(windows).length == 1) {
-    windows[mainId].move(0, 0);
+    windows[mainId].move(screen.x, screen.y);
     windows[mainId].resize(screen.width, screen.height);
   } else {
     // when main scale = 50, the divisor is 2
     var mainScaleFactor = (100 / workspace.getMainWindowScale() );
     var halfWidth = Math.floor(screen.width / mainScaleFactor);
-    windows[mainId].move(0, 0);
+    windows[mainId].move(screen.x, screen.y);
     windows[mainId].resize(halfWidth, screen.height);
     // remove from visible
     var ids = Object.keys(windows);
@@ -77,7 +77,7 @@ function tile(workspace) {
     var sliceHeight = Math.floor(screen.height / (ids.length) );
     ids.forEach(function(id, index) {
       console.log(halfWidth, index, sliceHeight, index*sliceHeight);
-      windows[id].move(halfWidth, index*sliceHeight);
+      windows[id].move(screen.x + halfWidth, screen.y + index*sliceHeight);
       windows[id].resize(remainWidth, sliceHeight);
     });
   }
