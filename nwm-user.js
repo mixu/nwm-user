@@ -8,106 +8,88 @@ var webrepl = require('webrepl');
 var nwm = new NWM();
 
 // KEYBOARD SHORTCUTS
+// Change the base modifier to your liking e.g. Xh.Mod4Mask if you just want to use the meta key without Ctrl
 var baseModifier = ( process.env.DISPLAY && process.env.DISPLAY == ':1' ? Xh.Mod4Mask|Xh.ControlMask : Xh.Mod4Mask); // to make it easier to reassign the "base" modifier combination
-// Workspace management - since we do the same thing for keys 0..9, use an array
+
+// Workspace management keys (OK)
 [XK.XK_1, XK.XK_2, XK.XK_3, XK.XK_4, XK.XK_5, XK.XK_6, XK.XK_7, XK.XK_8, XK.XK_9].forEach(function(key) {
-  // workspace switching
   // number keys are used to move between screens
-  nwm.addKey({ key: key, modifier: baseModifier, global: true }, function(event) { 
-    nwm.go(String.fromCharCode(event.keysym)); 
+  nwm.addKey({ key: key, modifier: baseModifier }, function(event) { 
+    var monitor = nwm.monitors.get(nwm.monitors.current);
+    monitor.go(String.fromCharCode(event.keysym)); 
   });  
   // moving windows between workspaces
-  nwm.addKey({ key: key, modifier: baseModifier|Xh.ShiftMask, global: true }, function(event) { 
-    nwm.focused_window && nwm.windowTo(nwm.focused_window, String.fromCharCode(event.keysym));
+  nwm.addKey({ key: key, modifier: baseModifier|Xh.ShiftMask }, function(event) { 
+    var monitor = nwm.monitors.get(nwm.monitors.current);
+    nwm.focused_window && monitor.windowTo(nwm.focused_window, String.fromCharCode(event.keysym));
   });
 });
 
-// starting xterm
-// enter key is used to launch xterm
-nwm.addKey({ key: XK.XK_Return, modifier: baseModifier|Xh.ShiftMask, global: true }, function(event) {
+// enter key is used to launch xterm (OK)
+nwm.addKey({ key: XK.XK_Return, modifier: baseModifier|Xh.ShiftMask }, function(event) {
+  // check for whether we are running in a different display
   var term = require('child_process').spawn('xterm', ['-lc'], { env: process.env });
   term.on('exit', function (code) {
     console.log('child process exited with code ', code);
   });  
 });
 
-// closing a window
-// c key is used to terminate the process
-nwm.addKey({ key: XK.XK_c, modifier: baseModifier|Xh.ShiftMask, global: true }, function(event) {
+// c key is used to close a window (OK)
+nwm.addKey({ key: XK.XK_c, modifier: baseModifier|Xh.ShiftMask }, function(event) {
   nwm.focused_window && nwm.wm.killWindow(nwm.focused_window);
 });
 
-// alternating between layout modes
-// space switches between layouts
-nwm.addKey({ key: XK.XK_space, modifier: baseModifier, global: true }, function(event) {
-  var workspace = nwm.getWorkspace(nwm.current_workspace);
+// space switches between layout modes (OK)
+nwm.addKey({ key: XK.XK_space, modifier: baseModifier }, function(event) {
+  var monitor = nwm.monitors.get(nwm.monitors.current);
+  var workspace = monitor.workspaces.get(monitor.workspaces.current);
   workspace.layout = nwm.nextLayout(workspace.layout);
   // monocle hides windows in the current workspace, so unhide them
-  nwm.go(nwm.current_workspace);
-  nwm.rearrange();
+  monitor.go(monitor.workspaces.current);
+  workspace.rearrange();
 });
 
-// increase and decrease master area size
-// h increases the main window size
+// h increases the main window size (OK)
 [XK.XK_h, XK.XK_F10].forEach(function(key) {
-  nwm.addKey({ key: key, modifier: baseModifier, global: true }, function(event) {
-    var workspace = nwm.getWorkspace(nwm.current_workspace);
+  nwm.addKey({ key: key, modifier: baseModifier }, function(event) {
+    var monitor = nwm.monitors.get(nwm.monitors.current);
+    var workspace = monitor.workspaces.get(monitor.workspaces.current);
     workspace.setMainWindowScale(workspace.getMainWindowScale() - 5);
     console.log('Set main window scale', workspace.getMainWindowScale());
-    nwm.rearrange();
+    workspace.rearrange();    
   });
 });
 
-// l decreases the main window size
+// l decreases the main window size (OK)
 [XK.XK_l, XK.XK_F11].forEach(function(key) {
-  nwm.addKey({ key: key, modifier: baseModifier, global: true }, function(event) {
-    var workspace = nwm.getWorkspace(nwm.current_workspace);
+  nwm.addKey({ key: key, modifier: baseModifier }, function(event) {
+    var monitor = nwm.monitors.get(nwm.monitors.current);
+    var workspace = monitor.workspaces.get(monitor.workspaces.current);
     workspace.setMainWindowScale(workspace.getMainWindowScale() + 5);
     console.log('Set main window scale', workspace.getMainWindowScale());
-    nwm.rearrange();
+    workspace.rearrange();    
   });  
 });
 
-// make the currently focused window the main window
 // tab makes the current window the main window
-nwm.addKey({ key: XK.XK_Return, modifier: baseModifier }, function(event) {
+nwm.addKey({ key: XK.XK_Tab, modifier: baseModifier }, function(event) {
+  var monitor = nwm.monitors.get(nwm.monitors.current);
+  var workspace = monitor.workspaces.get(monitor.workspaces.current);
   console.log('Set main window', nwm.focused_window);
-  nwm.setMainWindow(nwm.focused_window);
-  nwm.rearrange();  
+  workspace.setMainWindow(nwm.focused_window);
+  workspace.rearrange();  
 });
-
-// layout switching
-nwm.addKey({ key: XK.XK_t, modifier: baseModifier, global: true }, function() {
-  var workspace = nwm.getWorkspace(nwm.current_workspace);
-  workspace.layout = 'tile';
-  // monocle hides windows in the current workspace, so unhide them
-  nwm.go(nwm.current_workspace);
-  nwm.rearrange();
-});
-nwm.addKey({ key: XK.XK_w, modifier: baseModifier, global: true }, function() {
-  var workspace = nwm.getWorkspace(nwm.current_workspace);
-  workspace.layout = 'wide';
-  // monocle hides windows in the current workspace, so unhide them
-  nwm.go(nwm.current_workspace);
-  nwm.rearrange();  
-});
-nwm.addKey({ key: XK.XK_m, modifier: baseModifier, global: true }, function() {
-  var workspace = nwm.getWorkspace(nwm.current_workspace);
-  workspace.layout = 'monocle';
-  // monocle hides windows in the current workspace, so unhide them
-  nwm.go(nwm.current_workspace);
-  nwm.rearrange();  
-});
-
 
 // TODO: moving focus 
-nwm.addKey({ key: XK.XK_j, modifier: baseModifier, global: true }, function() {});
+nwm.addKey({ key: XK.XK_j, modifier: baseModifier }, function() {});
 // TODO: graceful shutdown
-nwm.addKey({ key: XK.XK_q, modifier: baseModifier|Xh.ShiftMask, global: true }, function() {});
+nwm.addKey({ key: XK.XK_q, modifier: baseModifier|Xh.ShiftMask }, function() {});
 
 // HOT LOAD
 // Load all files in ./layouts and watch it for changes
 nwm.hotLoad(__dirname+'/layouts/tile.js');
+
+/*
 nwm.hotLoad(__dirname+'/layouts/grid.js');
 
 nwm.hotLoad(__dirname+'/layouts/lion.js');
@@ -141,7 +123,7 @@ nwm.hotLoad(__dirname+'/layouts/lion.js');
     // rearrange
     nwm.rearrange();
   });
-
+*/
 // START
 nwm.start(function() {
   // Expose via stdout

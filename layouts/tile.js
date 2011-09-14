@@ -26,35 +26,68 @@
  *  +---------------------+ +---------------------+
  *        4 windows               5 windows
  */
-function tile(nwm) {
+/**
+ * Dwm's tiling a.k.a "Vertical Stack Tiling"
+ *
+ *  +----------+----------+ +----------+----------+
+ *  |          |          | |          |          |
+ *  |          |          | |          |          |
+ *  |          |          | |          |          |
+ *  |          |          | |          +----------+
+ *  |          |          | |          |          |
+ *  |          |          | |          |          |
+ *  |          |          | |          |          |
+ *  +---------------------+ +---------------------+
+ *        2 windows               3 windows
+ *
+ *  +----------+----------+ +----------+----------+
+ *  |          |          | |          |          |
+ *  |          |          | |          +----------+
+ *  |          +----------+ |          |          |
+ *  |          |          | |          +----------+
+ *  |          +----------+ |          |          |
+ *  |          |          | |          +----------+
+ *  |          |          | |          |          |
+ *  +---------------------+ +---------------------+
+ *        4 windows               5 windows
+ */
+function tile(workspace) {
   // the way DWM does it is to reserve half the screen for the first screen,
   // then split the other half among the rest of the screens
-  var windows = nwm.visible();
-  var screen = nwm.screen;
-  if(windows.length < 1) {
+  var windows = workspace.visible();
+  console.log('TILE', workspace, windows);
+  var screen = workspace.monitor;
+  console.log('TILE screen', screen);
+  if(Object.keys(windows).length < 1) {
     return;
   }
-  var mainId = nwm.getMainWindow();
-  if(windows.length == 1) {
-    nwm.move(mainId, 0, 0);
-    nwm.resize(mainId, screen.width, screen.height);
+  var mainId = workspace.getMainWindow();
+  console.log('mainID', mainId, windows);
+  if(Object.keys(windows).length == 1) {
+    windows[mainId].move(0, 0);
+    windows[mainId].resize(screen.width, screen.height);
   } else {
     // when main scale = 50, the divisor is 2
-    var mainScaleFactor = (100 / nwm.getMainWindowScale() );
+    var mainScaleFactor = (100 / workspace.getMainWindowScale() );
     var halfWidth = Math.floor(screen.width / mainScaleFactor);
-    nwm.move(mainId, 0, 0);
-    nwm.resize(mainId, halfWidth, screen.height);
+    windows[mainId].move(0, 0);
+    windows[mainId].resize(halfWidth, screen.height);
     // remove from visible
-    windows = windows.filter(function(id) { return (id != mainId); });
+    var ids = Object.keys(windows);
+    ids = ids.filter(function(id) { return (id != mainId); });
+    console.log(ids);
+    ids = ids.map(function(id) { return parseInt(id, 10); });
+    console.log(ids);
     console.log('tile', 'main window', mainId, 'others', windows );
     var remainWidth = screen.width - halfWidth;
-    var sliceHeight = Math.floor(screen.height / (windows.length) );
-    windows.forEach(function(id, index) {
-      nwm.move(id, halfWidth, index*sliceHeight);
-      nwm.resize(id, remainWidth, sliceHeight);
+    var sliceHeight = Math.floor(screen.height / (ids.length) );
+    ids.forEach(function(id, index) {
+      console.log(halfWidth, index, sliceHeight, index*sliceHeight);
+      windows[id].move(halfWidth, index*sliceHeight);
+      windows[id].resize(remainWidth, sliceHeight);
     });
   }
-}
+};
 
 // Hot loading works like this:
 // You export a callback function, which gets called every time 
