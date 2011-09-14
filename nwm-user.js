@@ -124,6 +124,18 @@ nwm.hotLoad(__dirname+'/layouts/lion.js');
     nwm.rearrange();
   });
 */
+
+//var vmware = require('child_process').spawn('vmware-user', [], { env: process.env });
+//vmware.on('exit', function (code) {
+//  console.log('child process exited with code ', code);
+//});  
+
+var guake = require('child_process').spawn('guake', [], { env: process.env });
+guake.on('exit', function (code) {
+  console.log('child process exited with code ', code);
+});  
+
+
 // START
 nwm.start(function() {
   // Expose via stdout
