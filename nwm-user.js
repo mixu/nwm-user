@@ -81,6 +81,24 @@ nwm.addKey({ key: XK.XK_Tab, modifier: baseModifier }, function(event) {
   workspace.rearrange();  
 });
 
+// moving windows between monitors
+nwm.addKey({ key: XK.XK_comma, modifier: baseModifier|Xh.ShiftMask }, function(event) {
+  var monitor = nwm.monitors.get(nwm.monitors.current);
+  if(monitor.focused_window && nwm.windows.exists(monitor.focused_window)) {
+    var window = nwm.windows.get(monitor.focused_window);
+    window.monitor = nwm.monitors.next(window.monitor);
+  }
+});
+
+// moving windows between monitors
+nwm.addKey({ key: XK.XK_period, modifier: baseModifier|Xh.ShiftMask }, function(event) {
+  var monitor = nwm.monitors.get(nwm.monitors.current);
+  if(monitor.focused_window && nwm.windows.exists(monitor.focused_window)) {
+    var window = nwm.windows.get(monitor.focused_window);
+    window.monitor = nwm.monitors.prev(window.monitor);
+  }
+});
+
 // TODO: moving focus 
 nwm.addKey({ key: XK.XK_j, modifier: baseModifier }, function() {});
 // TODO: graceful shutdown
@@ -131,11 +149,10 @@ nwm.hotLoad(__dirname+'/layouts/lion.js');
 //  console.log('child process exited with code ', code);
 //});  
 
-var guake = require('child_process').spawn('guake', [], { env: process.env });
-guake.on('exit', function (code) {
-  console.log('child process exited with code ', code);
-});  
-
+//var guake = require('child_process').spawn('guake', [], { env: process.env });
+//guake.on('exit', function (code) {
+//  console.log('child process exited with code ', code);
+//});
 
 // START
 nwm.start(function() {
