@@ -83,18 +83,22 @@ nwm.addKey({ key: XK.XK_Tab, modifier: baseModifier }, function(event) {
 
 // moving windows between monitors
 nwm.addKey({ key: XK.XK_comma, modifier: baseModifier|Xh.ShiftMask }, function(event) {
+  console.log('Current monitor is', nwm.monitors.current);
   var monitor = nwm.monitors.get(nwm.monitors.current);
   if(monitor.focused_window && nwm.windows.exists(monitor.focused_window)) {
     var window = nwm.windows.get(monitor.focused_window);
+    console.log('Set window monitor from', window.monitor, 'to', nwm.monitors.next(window.monitor));
     window.monitor = nwm.monitors.next(window.monitor);
   }
 });
 
 // moving windows between monitors
 nwm.addKey({ key: XK.XK_period, modifier: baseModifier|Xh.ShiftMask }, function(event) {
+  console.log('Current monitor is', nwm.monitors.current);
   var monitor = nwm.monitors.get(nwm.monitors.current);
   if(monitor.focused_window && nwm.windows.exists(monitor.focused_window)) {
     var window = nwm.windows.get(monitor.focused_window);
+    console.log('Set window monitor from', window.monitor, 'to', nwm.monitors.next(window.monitor));
     window.monitor = nwm.monitors.prev(window.monitor);
   }
 });
