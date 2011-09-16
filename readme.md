@@ -42,13 +42,20 @@ As a long time dwm user, I'm used to the following keyboard shortcuts:
     Meta + [1..n] -- Switch to workspace n
     Meta + Shift + [1..n] -- Move window to workspace n
 
-Coming soon:
 
     # Multi-monitor keys
-    Meta + , -- Focus previous screen
-    Meta + . -- Focus next screen
     Meta + Shift + , -- Send focused window to previous screen
     Meta + Shift + . -- Send focused window to next screen
+
+# Todo
+
+- Meta + F1 ... F10 to second set of workspaces
+- Media key bindings (JS)
+- Dropdown Chrome (JS)
+- Key bindings:
+
+    Meta + , -- Focus previous screen
+    Meta + . -- Focus next screen
 
 ## Other custom stuff
 

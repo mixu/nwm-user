@@ -45,6 +45,7 @@ nwm.addKey({ key: XK.XK_space, modifier: baseModifier }, function(event) {
   var monitor = nwm.monitors.get(nwm.monitors.current);
   var workspace = monitor.workspaces.get(monitor.workspaces.current);
   workspace.layout = nwm.nextLayout(workspace.layout);
+  console.log('[LAYOUT] Set layout to ', workspace.layout);
   // monocle hides windows in the current workspace, so unhide them
   monitor.go(monitor.workspaces.current);
   workspace.rearrange();
@@ -77,7 +78,7 @@ nwm.addKey({ key: XK.XK_Tab, modifier: baseModifier }, function(event) {
   var monitor = nwm.monitors.get(nwm.monitors.current);
   var workspace = monitor.workspaces.get(monitor.workspaces.current);
   console.log('Set main window', monitor.focused_window);
-  workspace.setMainWindow(monitor.focused_window);
+  workspace.mainWindow = monitor.focused_window;
   workspace.rearrange();  
 });
 
@@ -103,18 +104,39 @@ nwm.addKey({ key: XK.XK_period, modifier: baseModifier|Xh.ShiftMask }, function(
   }
 });
 
-// TODO: moving focus 
-nwm.addKey({ key: XK.XK_j, modifier: baseModifier }, function() {});
+// moving focus 
+nwm.addKey({ key: XK.XK_j, modifier: baseModifier }, function() {
+  var monitor = nwm.monitors.get(nwm.monitors.current);
+  if(monitor.focused_window && nwm.windows.exists(monitor.focused_window)) {
+    var previous = nwm.windows.prev(monitor.focused_window);
+    var window = nwm.windows.get(previous);
+    console.log('Current', monitor.focused_window, 'previous', window.id);
+    monitor.focused_window = window.id;
+    nwm.wm.focusWindow(window.id);
+  }  
+});
+nwm.addKey({ key: XK.XK_k, modifier: baseModifier }, function() {
+  var monitor = nwm.monitors.get(nwm.monitors.current);
+  if(monitor.focused_window && nwm.windows.exists(monitor.focused_window)) {
+    var next = nwm.windows.next(monitor.focused_window);
+    var window = nwm.windows.get(next);
+    console.log('Current', monitor.focused_window, 'next', window.id);
+    monitor.focused_window = window.id;
+    nwm.wm.focusWindow(monitor.focused_window);
+  }    
+});
+
 // TODO: graceful shutdown
 nwm.addKey({ key: XK.XK_q, modifier: baseModifier|Xh.ShiftMask }, function() {});
 
 // HOT LOAD
 // Load all files in ./layouts and watch it for changes
 nwm.hotLoad(__dirname+'/layouts/tile.js');
-
-/*
+nwm.hotLoad(__dirname+'/layouts/monocle.js');
+nwm.hotLoad(__dirname+'/layouts/wide.js');
 nwm.hotLoad(__dirname+'/layouts/grid.js');
 
+/*
 nwm.hotLoad(__dirname+'/layouts/lion.js');
 
   // set keyboard shortcuts

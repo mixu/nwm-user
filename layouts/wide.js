@@ -26,31 +26,32 @@
  *  +------+-------+------+ +----+-----+-----+----+
  *        4 windows               5 windows
  */
-function wide(nwm) {
+function wide(workspace) {
   // the way DWM does it is to reserve half the screen for the first screen,
   // then split the other half among the rest of the screens
-  var windows = nwm.visible();
-  var screen = nwm.screen;
-  if(windows.length < 1) {
+  var windows = workspace.visible();
+  var screen = workspace.monitor;
+  var window_ids = Object.keys(windows);
+  if(window_ids.length < 1) {
     return;
   }
-  var mainId = nwm.getMainWindow();
-  if(windows.length == 1) {
-    nwm.move(mainId, 0, 0);
-    nwm.resize(mainId, screen.width, screen.height);
+  var mainId = workspace.mainWindow;
+  if(window_ids.length == 1) {
+    windows[mainId].move(0, 0);
+    windows[mainId].resize(screen.width, screen.height);
   } else {
     // when main scale = 50, the divisor is 2
-    var mainScaleFactor = (100 / nwm.getMainWindowScale() );
+    var mainScaleFactor = (100 / workspace.getMainWindowScale() );
     var halfHeight = Math.floor(screen.height / mainScaleFactor);
-    nwm.move(mainId, 0, 0);
-    nwm.resize(mainId, screen.width, halfHeight);
+    windows[mainId].move(0, 0);
+    windows[mainId].resize(screen.width, halfHeight);
     // remove from visible
-    windows = windows.filter(function(id) { return (id != mainId); });
+    window_ids = window_ids.filter(function(id) { return (id != mainId); });
     var remainHeight = screen.height - halfHeight;
-    var sliceWidth = Math.floor(screen.width / (windows.length) );
-    windows.forEach(function(id, index) {
-      nwm.move(id, index*sliceWidth, halfHeight);
-      nwm.resize(id, sliceWidth, remainHeight);
+    var sliceWidth = Math.floor(screen.width / (window_ids.length) );
+    window_ids.forEach(function(id, index) {
+      windows[id].move(index*sliceWidth, halfHeight);
+      windows[id].resize(sliceWidth, remainHeight);
     });
   }
 };

@@ -27,19 +27,20 @@
  *        4 windows               5 windows
  */
 
-function monocle(nwm){
-  var windows = nwm.visible();
-  var screen = nwm.screen;
-  if(windows.length < 1) {
+function monocle(workspace){
+  var windows = workspace.visible();
+  var screen = workspace.monitor;
+  var window_ids = Object.keys(windows);
+  if(window_ids.length < 1) {
     return;
   }
-  var mainId = nwm.getMainWindow();
-  nwm.move(mainId, 0, 0);
-  nwm.resize(mainId, screen.width, screen.height);
+  var mainId = workspace.mainWindow;
+  windows[mainId].move(0, 0);
+  windows[mainId].resize(screen.width, screen.height);
   // remove from visible
-  windows = windows.filter(function(id) { return (id != mainId); });
-  windows.forEach(function(id, index) {
-    nwm.hide(id);
+  window_ids = window_ids.filter(function(id) { return (id != mainId); });
+  window_ids.forEach(function(id, index) {
+    windows[id].hide();
   });
 }
 
