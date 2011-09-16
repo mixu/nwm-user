@@ -153,46 +153,6 @@ nwm.hotLoad(__dirname+'/layouts/monocle.js');
 nwm.hotLoad(__dirname+'/layouts/wide.js');
 nwm.hotLoad(__dirname+'/layouts/grid.js');
 
-
-nwm.hotLoad(__dirname+'/layouts/lion.js');
-
-// set keyboard shortcuts
-nwm.addKey({ key: XK.XK_o, modifier: Xh.Mod4Mask }, function() {
-  // set the previous window as the full screen window
-  var monitor = nwm.monitors.get(nwm.monitors.current);
-  var workspace = monitor.workspaces.get(monitor.workspaces.current);
-  var windows = Object.keys(nwm.windows.items);
-  workspace.lion.direction = 'fromRight';
-  workspace.lion.previous_window = workspace.lion.current_window;
-  var mainPos = windows.indexOf(workspace.lion.current_window);
-  if(windows[mainPos+1]) {
-    workspace.lion.current_window = windows[mainPos+1];
-  } else {
-    workspace.lion.current_window = windows[0];
-  }
-  console.log('XK LEFT -- lion', workspace.lion.previous_window, ' to ', workspace.lion.current_window);
-  // rearrange
-  workspace.rearrange();
-});
-nwm.addKey({ key: XK.XK_p, modifier: Xh.Mod4Mask }, function() {
-  // set the next window as the full screen window
-  var monitor = nwm.monitors.get(nwm.monitors.current);
-  var workspace = monitor.workspaces.get(monitor.workspaces.current);
-  var windows = Object.keys(nwm.windows.items);
-  workspace.lion.direction = 'fromLeft';
-  workspace.lion.previous_window = workspace.lion.current_window;
-  var mainPos = windows.indexOf(workspace.lion.current_window);    
-  if(mainPos-1 >= 0) {
-    workspace.lion.current_window = windows[mainPos-1];
-  } else {
-    workspace.lion.current_window = windows[windows.length-1];
-  }
-  console.log('XK RIGHT -- lion', workspace.lion.previous_window, ' to ', workspace.lion.current_window);
-  // rearrange
-  workspace.rearrange();
-});
-
-
 //var vmware = require('child_process').spawn('vmware-user', [], { env: process.env });
 //vmware.on('exit', function (code) {
 //  console.log('child process exited with code ', code);
