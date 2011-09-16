@@ -25,10 +25,27 @@ var baseModifier = ( process.env.DISPLAY && process.env.DISPLAY == ':1' ? Xh.Mod
   });
 });
 
+
+var rainbow_index = -1;
+var rainbow_bg = [ 'DarkRed', 'salmon', 'yellow1', 'green3', 'LightSkyBlue', 'MidnightBlue', 'purple4'];
+var rainbow_fg = [ 'snow1', 'grey0', 'grey0', 'grey0', 'grey0', 'snow1', 'snow1'];
+
 // enter key is used to launch xterm (OK)
 nwm.addKey({ key: XK.XK_Return, modifier: baseModifier|Xh.ShiftMask }, function(event) {
   // check for whether we are running in a different display
-  var term = require('child_process').spawn('xterm', ['-lc'], { env: process.env });
+  if(process.env.DISPLAY && process.env.DISPLAY == ':1') {
+    // rainbow tarminals
+    rainbow_index++;
+    if(!rainbow_bg[rainbow_index]) {
+      rainbow_index = 0;
+    }
+    var term = require('child_process').spawn('xterm', ['-lc', 
+      '-fg', rainbow_fg[rainbow_index], 
+      '-bg', rainbow_bg[rainbow_index]], { env: process.env });    
+  } else {
+    // normal terminals
+    var term = require('child_process').spawn('xterm', ['-lc'], { env: process.env });    
+  }
   term.on('exit', function (code) {
     console.log('child process exited with code ', code);
   });  
@@ -136,39 +153,45 @@ nwm.hotLoad(__dirname+'/layouts/monocle.js');
 nwm.hotLoad(__dirname+'/layouts/wide.js');
 nwm.hotLoad(__dirname+'/layouts/grid.js');
 
-/*
+
 nwm.hotLoad(__dirname+'/layouts/lion.js');
 
-  // set keyboard shortcuts
-  nwm.addKey({ key: XK.XK_o, modifier: Xh.Mod4Mask }, function() {
-    // set the previous window as the full screen window
-    var windows = Object.keys(nwm.windows);
-    var workspace = nwm.getWorkspace(nwm.current_workspace);
-    var mainPos = windows.indexOf(''+workspace.lion.current_window);
-    if(windows[mainPos+1]) {
-      workspace.lion.current_window = windows[mainPos+1];
-    } else {
-      workspace.lion.current_window = windows[0];
-    }
-    console.log('XK LEFT -- lion', workspace.lion.current_window);
-    // rearrange
-    nwm.rearrange();
-  });
-  nwm.addKey({ key: XK.XK_p, modifier: Xh.Mod4Mask }, function() {
-    // set the next window as the full screen window
-    var windows = Object.keys(nwm.windows);
-    var workspace = nwm.getWorkspace(nwm.current_workspace);
-    var mainPos = windows.indexOf(''+workspace.lion.current_window);    
-    if(mainPos -1 >= 0) {
-      workspace.lion.current_window = windows[mainPos-1];
-    } else {
-      workspace.lion.current_window = windows[windows.length-1];
-    }
-    console.log('XK RIGHT -- lion', workspace.lion.current_window);
-    // rearrange
-    nwm.rearrange();
-  });
-*/
+// set keyboard shortcuts
+nwm.addKey({ key: XK.XK_o, modifier: Xh.Mod4Mask }, function() {
+  // set the previous window as the full screen window
+  var monitor = nwm.monitors.get(nwm.monitors.current);
+  var workspace = monitor.workspaces.get(monitor.workspaces.current);
+  var windows = Object.keys(nwm.windows.items);
+  workspace.lion.direction = 'fromRight';
+  workspace.lion.previous_window = workspace.lion.current_window;
+  var mainPos = windows.indexOf(workspace.lion.current_window);
+  if(windows[mainPos+1]) {
+    workspace.lion.current_window = windows[mainPos+1];
+  } else {
+    workspace.lion.current_window = windows[0];
+  }
+  console.log('XK LEFT -- lion', workspace.lion.previous_window, ' to ', workspace.lion.current_window);
+  // rearrange
+  workspace.rearrange();
+});
+nwm.addKey({ key: XK.XK_p, modifier: Xh.Mod4Mask }, function() {
+  // set the next window as the full screen window
+  var monitor = nwm.monitors.get(nwm.monitors.current);
+  var workspace = monitor.workspaces.get(monitor.workspaces.current);
+  var windows = Object.keys(nwm.windows.items);
+  workspace.lion.direction = 'fromLeft';
+  workspace.lion.previous_window = workspace.lion.current_window;
+  var mainPos = windows.indexOf(workspace.lion.current_window);    
+  if(mainPos-1 >= 0) {
+    workspace.lion.current_window = windows[mainPos-1];
+  } else {
+    workspace.lion.current_window = windows[windows.length-1];
+  }
+  console.log('XK RIGHT -- lion', workspace.lion.previous_window, ' to ', workspace.lion.current_window);
+  // rearrange
+  workspace.rearrange();
+});
+
 
 //var vmware = require('child_process').spawn('vmware-user', [], { env: process.env });
 //vmware.on('exit', function (code) {
