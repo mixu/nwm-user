@@ -27,8 +27,8 @@ As a long time dwm user, I'm used to the following keyboard shortcuts:
     Meta + space -- Alternates between layouts
 
     # Focus
-    TODO Meta + j -- Focus next window
-    TODO Meta + k -- Focus previous window
+    Meta + j -- Focus next window
+    Meta + k -- Focus previous window
 
     # Main window
     Meta + h -- Decrease master area size
@@ -47,11 +47,13 @@ As a long time dwm user, I'm used to the following keyboard shortcuts:
     Meta + Shift + , -- Send focused window to previous screen
     Meta + Shift + . -- Send focused window to next screen
 
-# Todo
+# Wishlist
 
+- Create an adaptive layout where even number of workspaces = grid and odd = tiling
 - Meta + F1 ... F10 to second set of workspaces
-- Media key bindings (JS)
-- Dropdown Chrome (JS)
+- Media key bindings (JS):
+    - Win + Z X C V B
+- Dropdown Chrome (JS) Win+F12
 - Key bindings:
 
     Meta + , -- Focus previous screen
