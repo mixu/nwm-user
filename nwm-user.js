@@ -160,10 +160,9 @@ nwm.addKey({ key: XK.XK_q, modifier: baseModifier|Xh.ShiftMask }, function() {})
 
 // HOT LOAD
 // Load all files in ./layouts and watch it for changes
-nwm.hotLoad(__dirname+'/layouts/tile.js');
+nwm.hotLoad(__dirname+'/layouts/flexible.js');
 nwm.hotLoad(__dirname+'/layouts/monocle.js');
 nwm.hotLoad(__dirname+'/layouts/wide.js');
-nwm.hotLoad(__dirname+'/layouts/grid.js');
 
 //var vmware = require('child_process').spawn('vmware-user', [], { env: process.env });
 //vmware.on('exit', function (code) {
