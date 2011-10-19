@@ -1,6 +1,6 @@
 # My nwm config
 
-Would you like to install nwm with your own customized configuration files (and npm etc. dependencies)? 
+Would you like to install nwm with your own customized configuration files (and npm etc. dependencies)?
 
 Fork this repo. It's got a decent starting point, including a package.json for fetching nwm.
 
@@ -49,7 +49,7 @@ As a long time dwm user, I'm used to the following keyboard shortcuts:
 
 # Wishlist
 
-- Create an adaptive layout where even number of workspaces = grid and odd = tiling
+- (DONE) Create an adaptive layout where even number of workspaces = grid and odd = tiling
 - Meta + F1 ... F10 to second set of workspaces
 - Media key bindings (JS):
     - Win + Z X C V B

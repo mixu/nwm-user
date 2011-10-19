@@ -87,7 +87,7 @@ function tile(workspace) {
  */
 function flexible(workspace) {
   var windows = workspace.visible();
-  if(Object.keys(windows).length % 2 == 0) {
+  if(Object.keys(windows).length % 2 == 0 && Object.keys(windows).length != 2) {
     grid(workspace);
   } else {
     tile(workspace);

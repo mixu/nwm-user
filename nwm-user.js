@@ -44,7 +44,7 @@ nwm.addKey({ key: XK.XK_Return, modifier: baseModifier|Xh.ShiftMask }, function(
       '-bg', rainbow_bg[rainbow_index]], { env: process.env });
   } else {
     // normal terminals
-    var term = require('child_process').spawn('xterm', ['-lc'], { env: process.env });
+    var term = require('child_process').spawn('gnome-terminal', [ ], { env: process.env });
   }
   term.on('exit', function (code) {
     console.log('child process exited with code ', code);
