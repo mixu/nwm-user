@@ -25,6 +25,18 @@ var baseModifier = ( process.env.DISPLAY && process.env.DISPLAY == ':1' ? Xh.Mod
   });
 });
 
+// ten more workspaces
+[XK.XK_F1, XK.XK_F2, XK.XK_F3, XK.XK_F4, XK.XK_F5, XK.XK_F6, XK.XK_F7, XK.XK_F8, XK.XK_F9, XK.F10].forEach(function(key, index){
+  nwm.addKey({ key: key, modifier: baseModifier }, function(event) {
+    var monitor = nwm.monitors.get(nwm.monitors.current);
+    monitor.go(10 + index);
+  });
+  nwm.addKey({ key: key, modifier: baseModifier|Xh.ShiftMask }, function(event) {
+    var monitor = nwm.monitors.get(nwm.monitors.current);
+    monitor.focused_window && monitor.windowTo(monitor.focused_window, 10 + index);
+  });
+});
+
 
 var rainbow_index = -1;
 var rainbow_bg = [ 'DarkRed', 'salmon', 'yellow1', 'green3', 'LightSkyBlue', 'MidnightBlue', 'purple4'];
