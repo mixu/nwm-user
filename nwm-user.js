@@ -29,13 +29,34 @@ var baseModifier = ( process.env.DISPLAY && process.env.DISPLAY == ':1' ? Xh.Mod
 [XK.XK_F1, XK.XK_F2, XK.XK_F3, XK.XK_F4, XK.XK_F5, XK.XK_F6, XK.XK_F7, XK.XK_F8, XK.XK_F9, XK.F10].forEach(function(key, index){
   nwm.addKey({ key: key, modifier: baseModifier }, function(event) {
     var monitor = nwm.monitors.get(nwm.monitors.current);
-    monitor.go(10 + index);
+    monitor.go(9 + index);
   });
   nwm.addKey({ key: key, modifier: baseModifier|Xh.ShiftMask }, function(event) {
     var monitor = nwm.monitors.get(nwm.monitors.current);
-    monitor.focused_window && monitor.windowTo(monitor.focused_window, 10 + index);
+    monitor.focused_window && monitor.windowTo(monitor.focused_window, 9 + index);
   });
 });
+
+// meta Page up and meta Page down should go through the workspaces
+nwm.addKey({ key: XK.XK_KP_Page_Up, modifier: baseModifier }, function(event) {
+  var monitor = nwm.monitors.get(nwm.monitors.current);
+  var workspace = monitor.workspaces.get(monitor.workspaces.current);
+  var next = workspace + 1;
+  if(next < 0 || next > 19) {
+    next = 0;
+  }
+  monitor.go(next);
+});
+nwm.addKey({ key: XK.XK_KP_Page_Down, modifier: baseModifier }, function(event) {
+  var monitor = nwm.monitors.get(nwm.monitors.current);
+  var workspace = monitor.workspaces.get(monitor.workspaces.current);
+  var prev = workspace - 1;
+  if(prev < 0 || prev > 19) {
+    prev = 0;
+  }
+  monitor.go(prev);
+});
+
 
 
 var rainbow_index = -1;
