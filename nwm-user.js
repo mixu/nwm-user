@@ -168,7 +168,9 @@ nwm.addKey({ key: XK.XK_k, modifier: baseModifier }, function() {
 });
 
 // TODO: graceful shutdown
-nwm.addKey({ key: XK.XK_q, modifier: baseModifier|Xh.ShiftMask }, function() {});
+nwm.addKey({ key: XK.XK_q, modifier: baseModifier|Xh.ShiftMask }, function() {
+  process.exit();
+});
 
 // HOT LOAD
 // Load all files in ./layouts and watch it for changes
