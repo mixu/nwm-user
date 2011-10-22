@@ -38,7 +38,7 @@ var baseModifier = ( process.env.DISPLAY && process.env.DISPLAY == ':1' ? Xh.Mod
 });
 
 // meta Page up and meta Page down should go through the workspaces
-nwm.addKey({ key: XK.XK_KP_Page_Up, modifier: baseModifier }, function(event) {
+nwm.addKey({ key: XK.XK_Page_Up, modifier: baseModifier }, function(event) {
   var monitor = nwm.monitors.get(nwm.monitors.current);
   var workspace = monitor.workspaces.get(monitor.workspaces.current);
   var next = workspace + 1;
@@ -47,7 +47,7 @@ nwm.addKey({ key: XK.XK_KP_Page_Up, modifier: baseModifier }, function(event) {
   }
   monitor.go(next);
 });
-nwm.addKey({ key: XK.XK_KP_Page_Down, modifier: baseModifier }, function(event) {
+nwm.addKey({ key: XK.XK_Page_Down, modifier: baseModifier }, function(event) {
   var monitor = nwm.monitors.get(nwm.monitors.current);
   var workspace = monitor.workspaces.get(monitor.workspaces.current);
   var prev = workspace - 1;
