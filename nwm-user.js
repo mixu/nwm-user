@@ -206,12 +206,12 @@ nwm.hotLoad(__dirname+'/layouts/wide.js');
 
 // START
 nwm.start(function() {
-  // Expose via stdout
-  var repl_stdout = require('repl').start();
-  repl_stdout.context.nwm = nwm;
-  repl_stdout.context.Xh = Xh;
-  // Expose via webrepl
-  console.log('Starting webrepl');
-  var repl_web = webrepl.start(6000);
-  repl_web.context.nwm = nwm;
+  // expose repl over unix socket
+  var repl = require('repl');
+  var net = require('net');
+  net.createServer(function(socket) {
+    console.log('Started REPL via unix socket on ./repl-sock. Use socat to connect: "socat STDIN UNIX-CONNECT:./repl-sock"');
+    var r = repl.start('>', socket);
+    r.context.nwm = nwm;
+  }).listen('./repl-sock');
 });
