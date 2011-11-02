@@ -12,7 +12,8 @@ var nwm = new NWM();
 var baseModifier = ( process.env.DISPLAY && process.env.DISPLAY == ':1' ? Xh.Mod4Mask|Xh.ControlMask : Xh.Mod4Mask); // to make it easier to reassign the "base" modifier combination
 
 // Workspace management keys (OK)
-[XK.XK_1, XK.XK_2, XK.XK_3, XK.XK_4, XK.XK_5, XK.XK_6, XK.XK_7, XK.XK_8, XK.XK_9].forEach(function(key) {
+[1, 2, 3, 4, 5, 6, 7, 8, 9].forEach(function(num) {
+  var key = XK[num]; // Can't use XK.1 because it is not a valid JS expression, must use XK['1'].
   // number keys are used to move between screens
   nwm.addKey({ key: key, modifier: baseModifier }, function(event) {
     var monitor = nwm.currentMonitor();
@@ -26,7 +27,7 @@ var baseModifier = ( process.env.DISPLAY && process.env.DISPLAY == ':1' ? Xh.Mod
 });
 
 // ten more workspaces
-[XK.XK_F1, XK.XK_F2, XK.XK_F3, XK.XK_F4, XK.XK_F5, XK.XK_F6, XK.XK_F7, XK.XK_F8, XK.XK_F9, XK.F10].forEach(function(key, index){
+[XK.F1, XK.F2, XK.F3, XK.F4, XK.F5, XK.F6, XK.F7, XK.F8, XK.F9, XK.F10].forEach(function(key, index){
   nwm.addKey({ key: key, modifier: baseModifier }, function(event) {
     var monitor = nwm.monitors.get(nwm.monitors.current);
     monitor.go(11 + index);
@@ -38,7 +39,7 @@ var baseModifier = ( process.env.DISPLAY && process.env.DISPLAY == ':1' ? Xh.Mod
 });
 
 // meta Page up and meta Page down should go through the workspaces
-nwm.addKey({ key: XK.XK_Page_Up, modifier: baseModifier }, function(event) {
+nwm.addKey({ key: XK.Page_Up, modifier: baseModifier }, function(event) {
   var monitor = nwm.monitors.get(nwm.monitors.current);
   var workspace = monitor.workspaces.get(monitor.workspaces.current);
   var next = workspace + 1;
@@ -47,7 +48,7 @@ nwm.addKey({ key: XK.XK_Page_Up, modifier: baseModifier }, function(event) {
   }
   monitor.go(next);
 });
-nwm.addKey({ key: XK.XK_Page_Down, modifier: baseModifier }, function(event) {
+nwm.addKey({ key: XK.Page_Down, modifier: baseModifier }, function(event) {
   var monitor = nwm.monitors.get(nwm.monitors.current);
   var workspace = monitor.workspaces.get(monitor.workspaces.current);
   var prev = workspace - 1;
@@ -64,7 +65,7 @@ var rainbow_bg = [ 'DarkRed', 'salmon', 'yellow1', 'green3', 'LightSkyBlue', 'Mi
 var rainbow_fg = [ 'snow1', 'grey0', 'grey0', 'grey0', 'grey0', 'snow1', 'snow1'];
 
 // enter key is used to launch xterm (OK)
-nwm.addKey({ key: XK.XK_Return, modifier: baseModifier|Xh.ShiftMask }, function(event) {
+nwm.addKey({ key: XK.Return, modifier: baseModifier|Xh.ShiftMask }, function(event) {
   // check for whether we are running in a different display
   if(process.env.DISPLAY && process.env.DISPLAY == ':1') {
     // rainbow tarminals
@@ -85,13 +86,13 @@ nwm.addKey({ key: XK.XK_Return, modifier: baseModifier|Xh.ShiftMask }, function(
 });
 
 // c key is used to close a window (OK)
-nwm.addKey({ key: XK.XK_c, modifier: baseModifier|Xh.ShiftMask }, function(event) {
+nwm.addKey({ key: XK.c, modifier: baseModifier|Xh.ShiftMask }, function(event) {
   var monitor = nwm.currentMonitor();
   monitor.focused_window && nwm.wm.killWindow(monitor.focused_window);
 });
 
 // space switches between layout modes (OK)
-nwm.addKey({ key: XK.XK_space, modifier: baseModifier }, function(event) {
+nwm.addKey({ key: XK.space, modifier: baseModifier }, function(event) {
   var monitor = nwm.currentMonitor();
   var workspace = monitor.currentWorkspace();
   workspace.layout = nwm.nextLayout(workspace.layout);
@@ -101,7 +102,7 @@ nwm.addKey({ key: XK.XK_space, modifier: baseModifier }, function(event) {
 });
 
 // h increases the main window size (OK)
-[XK.XK_h, XK.XK_F10].forEach(function(key) {
+[XK.h, XK.F10].forEach(function(key) {
   nwm.addKey({ key: key, modifier: baseModifier }, function(event) {
     var workspace = nwm.currentMonitor().currentWorkspace();
     workspace.setMainWindowScale(workspace.getMainWindowScale() - 5);
@@ -110,7 +111,7 @@ nwm.addKey({ key: XK.XK_space, modifier: baseModifier }, function(event) {
 });
 
 // l decreases the main window size (OK)
-[XK.XK_l, XK.XK_F11].forEach(function(key) {
+[XK.l, XK.F11].forEach(function(key) {
   nwm.addKey({ key: key, modifier: baseModifier }, function(event) {
     var workspace = nwm.currentMonitor().currentWorkspace();
     workspace.setMainWindowScale(workspace.getMainWindowScale() + 5);
@@ -119,14 +120,14 @@ nwm.addKey({ key: XK.XK_space, modifier: baseModifier }, function(event) {
 });
 
 // tab makes the current window the main window
-nwm.addKey({ key: XK.XK_Tab, modifier: baseModifier }, function(event) {
+nwm.addKey({ key: XK.Tab, modifier: baseModifier }, function(event) {
   var monitor = nwm.currentMonitor();
   console.log('Set main window', monitor.focused_window);
   monitor.currentWorkspace().mainWindow = monitor.focused_window;
 });
 
 // moving windows between monitors
-nwm.addKey({ key: XK.XK_comma, modifier: baseModifier|Xh.ShiftMask }, function(event) {
+nwm.addKey({ key: XK.comma, modifier: baseModifier|Xh.ShiftMask }, function(event) {
   console.log('Current monitor is', nwm.monitors.current);
   var monitor = nwm.currentMonitor();
   var window = monitor.currentWindow();
@@ -143,7 +144,7 @@ nwm.addKey({ key: XK.XK_comma, modifier: baseModifier|Xh.ShiftMask }, function(e
 });
 
 // moving windows between monitors
-nwm.addKey({ key: XK.XK_period, modifier: baseModifier|Xh.ShiftMask }, function(event) {
+nwm.addKey({ key: XK.period, modifier: baseModifier|Xh.ShiftMask }, function(event) {
   console.log('Current monitor is', nwm.monitors.current);
   var monitor = nwm.currentMonitor();
   var window = monitor.currentWindow();
@@ -160,7 +161,7 @@ nwm.addKey({ key: XK.XK_period, modifier: baseModifier|Xh.ShiftMask }, function(
 });
 
 // moving focus
-nwm.addKey({ key: XK.XK_j, modifier: baseModifier }, function() {
+nwm.addKey({ key: XK.j, modifier: baseModifier }, function() {
   var monitor = nwm.currentMonitor();
   var current = monitor.currentWindow();
   if(current) {
@@ -171,7 +172,7 @@ nwm.addKey({ key: XK.XK_j, modifier: baseModifier }, function() {
     nwm.wm.focusWindow(window.id);
   }
 });
-nwm.addKey({ key: XK.XK_k, modifier: baseModifier }, function() {
+nwm.addKey({ key: XK.k, modifier: baseModifier }, function() {
   var monitor = nwm.currentMonitor();
   var current = monitor.currentWindow();
   if(current) {
@@ -184,7 +185,7 @@ nwm.addKey({ key: XK.XK_k, modifier: baseModifier }, function() {
 });
 
 // TODO: graceful shutdown
-nwm.addKey({ key: XK.XK_q, modifier: baseModifier|Xh.ShiftMask }, function() {
+nwm.addKey({ key: XK.q, modifier: baseModifier|Xh.ShiftMask }, function() {
   process.exit();
 });
 
@@ -204,6 +205,25 @@ nwm.hotLoad(__dirname+'/layouts/wide.js');
 //  console.log('child process exited with code ', code);
 //});
 
+
+// REPL
+
+// list windows
+var Repl = function() {};
+Repl.windows = function() {
+  console.log(['id', 'monitor', 'workspace', 'title', 'x', 'y', 'h', 'w'].join(' | '));
+  var items = [];
+  Object.keys(nwm.windows.items).forEach(function(id) {
+    var window = nwm.windows.get(id);
+    items.push([window.id, window.monitor, window.workspace, window.title, window.x, window.y, window.height, window.width ]);
+  });
+
+  items.forEach(function(item) {
+    console.log(item.join(' | '));
+  });
+};
+
+
 // START
 nwm.start(function() {
   // expose repl over unix socket
@@ -213,5 +233,6 @@ nwm.start(function() {
     console.log('Started REPL via unix socket on ./repl-sock. Use socat to connect: "socat STDIN UNIX-CONNECT:./repl-sock"');
     var r = repl.start('>', socket);
     r.context.nwm = nwm;
+    r.context.windows = Repl.windows;
   }).listen('./repl-sock');
 });
