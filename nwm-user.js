@@ -29,11 +29,11 @@ var baseModifier = ( process.env.DISPLAY && process.env.DISPLAY == ':1' ? Xh.Mod
 [XK.XK_F1, XK.XK_F2, XK.XK_F3, XK.XK_F4, XK.XK_F5, XK.XK_F6, XK.XK_F7, XK.XK_F8, XK.XK_F9, XK.F10].forEach(function(key, index){
   nwm.addKey({ key: key, modifier: baseModifier }, function(event) {
     var monitor = nwm.monitors.get(nwm.monitors.current);
-    monitor.go(9 + index);
+    monitor.go(11 + index);
   });
   nwm.addKey({ key: key, modifier: baseModifier|Xh.ShiftMask }, function(event) {
     var monitor = nwm.monitors.get(nwm.monitors.current);
-    monitor.focused_window && monitor.windowTo(monitor.focused_window, 9 + index);
+    monitor.focused_window && monitor.windowTo(monitor.focused_window, 11 + index);
   });
 });
 
