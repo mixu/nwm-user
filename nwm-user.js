@@ -26,8 +26,8 @@ var baseModifier = ( process.env.DISPLAY && process.env.DISPLAY == ':1' ? Xh.Mod
   });
 });
 
-// ten more workspaces
-[XK.F1, XK.F2, XK.F3, XK.F4, XK.F5, XK.F6, XK.F7, XK.F8, XK.F9, XK.F10].forEach(function(key, index){
+// nine more workspaces
+[XK.F1, XK.F2, XK.F3, XK.F4, XK.F5, XK.F6, XK.F7, XK.F8, XK.F9].forEach(function(key, index){
   nwm.addKey({ key: key, modifier: baseModifier }, function(event) {
     var monitor = nwm.monitors.get(nwm.monitors.current);
     monitor.go(11 + index);
