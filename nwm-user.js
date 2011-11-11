@@ -2,7 +2,6 @@
 var NWM = require('nwm').NWM;
 var XK = require('nwm').keysymdef;
 var Xh = require('nwm').Xh;
-var webrepl = require('webrepl');
 
 // instantiate nwm and configure it
 var nwm = new NWM();
@@ -78,7 +77,7 @@ nwm.addKey({ key: XK.Return, modifier: baseModifier|Xh.ShiftMask }, function(eve
       '-bg', rainbow_bg[rainbow_index]], { env: process.env });
   } else {
     // normal terminals
-    var term = require('child_process').spawn('gnome-terminal', [ ], { env: process.env });
+    var term = require('child_process').spawn('sakura', [ ], { env: process.env });
   }
   term.on('exit', function (code) {
     console.log('child process exited with code ', code);
