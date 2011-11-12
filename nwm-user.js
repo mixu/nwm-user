@@ -11,7 +11,7 @@ var nwm = new NWM();
 var baseModifier = ( process.env.DISPLAY && process.env.DISPLAY == ':1' ? Xh.Mod4Mask|Xh.ControlMask : Xh.Mod4Mask); // to make it easier to reassign the "base" modifier combination
 
 // Workspace management keys (OK)
-[1, 2, 3, 4, 5, 6, 7, 8, 9].forEach(function(num) {
+[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].forEach(function(num) {
   var key = XK[num]; // Can't use XK.1 because it is not a valid JS expression, must use XK['1'].
   // number keys are used to move between screens
   nwm.addKey({ key: key, modifier: baseModifier }, function(event) {
@@ -37,27 +37,39 @@ var baseModifier = ( process.env.DISPLAY && process.env.DISPLAY == ':1' ? Xh.Mod
   });
 });
 
-// meta Page up and meta Page down should go through the workspaces
-nwm.addKey({ key: XK.Page_Up, modifier: baseModifier }, function(event) {
+function workspaceUp() {
   var monitor = nwm.monitors.get(nwm.monitors.current);
-  var workspace = monitor.workspaces.get(monitor.workspaces.current);
+  var workspace = monitor.workspaces.current;
   var next = workspace + 1;
-  if(next < 0 || next > 19) {
+  if(next < 0) {
+    next = 19;
+  }
+  if(next > 19) {
     next = 0;
   }
   monitor.go(next);
-});
-nwm.addKey({ key: XK.Page_Down, modifier: baseModifier }, function(event) {
+}
+
+function workspaceDown() {
   var monitor = nwm.monitors.get(nwm.monitors.current);
-  var workspace = monitor.workspaces.get(monitor.workspaces.current);
+  var workspace = monitor.workspaces.current;
   var prev = workspace - 1;
-  if(prev < 0 || prev > 19) {
+  if(prev < 0) {
+    prev = 19;
+  }
+  if(prev > 19) {
     prev = 0;
   }
   monitor.go(prev);
-});
+}
 
+// meta+left and meta+right key for switching workspaces
+nwm.addKey({ key: XK.Left, modifier: baseModifier }, workspaceDown);
+nwm.addKey({ key: XK.Right, modifier: baseModifier }, workspaceUp);
 
+// meta Page up and meta Page down should go through the workspaces
+nwm.addKey({ key: XK.Page_Up, modifier: baseModifier }, workspaceUp);
+nwm.addKey({ key: XK.Page_Down, modifier: baseModifier }, workspaceDown);
 
 var rainbow_index = -1;
 var rainbow_bg = [ 'DarkRed', 'salmon', 'yellow1', 'green3', 'LightSkyBlue', 'MidnightBlue', 'purple4'];
