@@ -1,17 +1,50 @@
 # My nwm config
 
-Would you like to install nwm with your own customized configuration files (and npm etc. dependencies)?
+This is what I use for my nwm.
 
-Fork this repo. It's got a decent starting point, including a package.json for fetching nwm.
+Customizations:
+
+- My default layout is switched based on the number of windows on screen:
+    1 window = fullscreen
+    2 windows = DWM's tiling
+    3 windows = DWM's tiling
+    4 windows = Fair grid
+    5 = tile, 6 = grid
+    ... and so on
+- I have 19 workspaces per screen (Meta + F1 .. F9 are mapped to another 9 workspaces).
+- Meta + Left / Meta + Right and Meta + PgDown / Meta + PgUp switch between workspaces (up / down)
+
+Todo / experiments todo:
+
+- Full screen detection / flash support
+- Write a more tmux-style grid layout (e.g. adaptive slicing)
+- Add support for "execute or find by window class" keyboard shortcuts (e.g. for chrome and pcmanfm)
+- Add support for permanent window decoration, like Conky or another panel
+- Add support for desktop widgets
+- Start window always on a particular screen
+    - This would probably benefit from a HTTP interface to configure and examine nwm
+- Write a light compositing desktop background updater
+    -  Would make it possible to do cool composited things like taking a time and overlaying another mask like in http://www.flickr.com/photos/haiiro/5356014236/
+- Media key bindings (JS, to nplay):
+    - Win + Z X C V B
+
+
 
 ## Installing
 
-    git clone ...
-    npm install
+    # NWM
+    git clone git://github.com/mixu/nwm.git
+    cd nwm
+    node-waf clean || true && node-waf configure build
+    sudo npm link # add a global npm symlink to this repository - so nwm-user can find it (man npm link)
+    
+    # NWM-user
+    cd ..
+    git clone git://github.com/mixu/nwm-user.git
+    cd nwm-user
+    npm link nwm # now make a symlink to the nwm installation
 
-And then do whatever is needed to make your login manager execute nwm.sh.
-
-You might also need to adjust nwm.sh, as GDM seems to dislike relative paths...
+And then do whatever is needed to make your login manager start nwm-user.js
 
 ## Keyboard shortcuts
 
@@ -21,9 +54,6 @@ As a long time dwm user, I'm used to the following keyboard shortcuts:
     Meta + Shift + Enter -- Start xterm
 
     # Layouts
-    Meta + t -- Sets tiled layout
-    Meta + w -- Sets wide layout
-    Meta + m -- Sets monocle layout
     Meta + space -- Alternates between layouts
 
     # Focus
@@ -32,8 +62,10 @@ As a long time dwm user, I'm used to the following keyboard shortcuts:
 
     # Main window
     Meta + h -- Decrease master area size
+    Meta + F10
     Meta + l -- Increase master area size
-    Meta + Enter -- Sets currently focused window as main window
+    Meta + F11
+    Meta + Tab -- Sets currently focused window as main window
 
     # Closing window
     Meta + Shift + c -- Close focused window
@@ -47,22 +79,6 @@ As a long time dwm user, I'm used to the following keyboard shortcuts:
     Meta + Shift + , -- Send focused window to previous screen
     Meta + Shift + . -- Send focused window to next screen
 
-# Wishlist
 
-- (DONE) Create an adaptive layout where even number of workspaces = grid and odd = tiling
-- Meta + F1 ... F10 to second set of workspaces
-- Media key bindings (JS):
-    - Win + Z X C V B
-- Dropdown Chrome (JS) Win+F12
-- Key bindings:
 
-    Meta + , -- Focus previous screen
-    Meta + . -- Focus next screen
-
-## Other custom stuff
-
-I launch a couple of programs on startup:
-
-- guake -- the dropdown console (needs xfce4-notifyd)
-- google-chrome
 
