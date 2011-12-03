@@ -94,6 +94,5 @@ function flexible(workspace) {
   }
 }
 
-module.exports = function(nwm) {
-  nwm.addLayout('flexible', flexible);
-};
+module.exports = flexible;
+
