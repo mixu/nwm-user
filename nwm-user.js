@@ -203,6 +203,29 @@ keyboard_shortcuts.forEach(function(shortcut) {
   }
 });
 
+
+// /usr/include/X11/XF86keysym.h
+
+var XF86keysym = {
+  AudioLowerVolume: 0x1008FF11,   /* Volume control down        */
+  AudioMute:  0x1008FF12,   /* Mute sound from the system */
+  AudioRaiseVolume: 0x1008FF13   /* Volume control up          */
+};
+
+// Experimental volume key support for my thinkpad
+
+nwm.addKey( { key: XF86keysym.AudioLowerVolume, modifier: 0 }, function() {
+  child_process.spawn('amixer', ['set', 'Master', '2dB-', 'unmute'], { env: process.env });
+});
+
+nwm.addKey( { key: XF86keysym.AudioMute, modifier: 0 }, function() {
+  child_process.spawn('amixer', ['set', 'Master', 'toggle'], { env: process.env });
+});
+
+nwm.addKey( { key: XF86keysym.AudioRaiseVolume, modifier: 0 }, function() {
+  child_process.spawn('amixer', ['set', 'Master', '2dB+', 'unmute'], { env: process.env });
+});
+
 // REPL
 
 // list windows
