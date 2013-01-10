@@ -81,10 +81,10 @@ var keyboard_shortcuts = [
     }
   },
   {
-    key: 'Return', // enter key launches sakura
+    key: 'Return', // enter key launches xterm
     modifier: [ 'shift' ],
     callback: function(event) {
-      child_process.spawn('sakura', [], { env: process.env });
+      child_process.spawn('xterm', [], { env: process.env });
     }
   },
   {
@@ -245,14 +245,4 @@ Repl.windows = function() {
 
 
 // START
-nwm.start(function() {
-  // expose repl over unix socket
-  var repl = require('repl');
-  var net = require('net');
-  net.createServer(function(socket) {
-    console.log('Started REPL via unix socket on ./repl-sock. Use socat to connect: "socat STDIN UNIX-CONNECT:./repl-sock"');
-    var r = repl.start('>', socket);
-    r.context.nwm = nwm;
-    r.context.windows = Repl.windows;
-  }).listen('./repl-sock');
-});
+nwm.start(function() {});
