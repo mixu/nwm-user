@@ -53,6 +53,18 @@ if ( process.env.DISPLAY && process.env.DISPLAY == ':1' ) {
   baseModifier = Xh.Mod4Mask|Xh.ControlMask; // Win + Ctrl
 }
 
+
+function exec(command, onErr) {
+  var term = child_process.spawn(command, [], { env: process.env });
+
+  term.stderr.setEncoding('utf8');
+  term.stderr.on('data', function (data) {
+    if (/^execvp\(\)/.test(data)) {
+      onErr && onErr();
+    }
+  });
+}
+
 var keyboard_shortcuts = [
   {
     key: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0], // number keys are used to move between screens
@@ -84,7 +96,9 @@ var keyboard_shortcuts = [
     key: 'Return', // enter key launches xterm
     modifier: [ 'shift' ],
     callback: function(event) {
-      child_process.spawn('xterm', [], { env: process.env });
+      exec('sakura', function() {
+        exec('xterm');
+      });
     }
   },
   {
