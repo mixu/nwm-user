@@ -53,9 +53,17 @@ if ( process.env.DISPLAY && process.env.DISPLAY == ':1' ) {
   baseModifier = Xh.Mod4Mask|Xh.ControlMask; // Win + Ctrl
 }
 
+var envWithLang = JSON.parse(JSON.stringify(process.env));
+
+console.log(envWithLang);
+
+envWithLang.LANGUAGE = 'en_US.utf8';
+envWithLang.LANG = 'en_US.utf8';
+envWithLang.LC_ALL = 'en_US.utf8';
+
 
 function exec(command, onErr) {
-  var term = child_process.spawn(command, [], { env: process.env });
+  var term = child_process.spawn(command, [], { env: envWithLang });
 
   term.stderr.setEncoding('utf8');
   term.stderr.on('data', function (data) {
