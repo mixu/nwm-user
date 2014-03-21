@@ -62,8 +62,14 @@ envWithLang.LANG = 'en_US.utf8';
 envWithLang.LC_ALL = 'en_US.utf8';
 
 
-function exec(command, onErr) {
-  var term = child_process.spawn(command, [], { env: envWithLang });
+function exec(command, opts, onErr) {
+  // opts is optional
+  if(arguments.length == 2) {
+    onErr = opts;
+    opts = [];
+  }
+
+  var term = child_process.spawn(command, opts, { env: envWithLang });
 
   term.stderr.setEncoding('utf8');
   term.stderr.on('data', function (data) {
@@ -107,6 +113,12 @@ var keyboard_shortcuts = [
       exec('sakura', function() {
         exec('xterm');
       });
+    }
+  },
+  {
+    key: 'e', // win+e launches file manager
+    callback: function(event) {
+      exec('nautilus', [ '--no-desktop' ]);
     }
   },
   {
