@@ -64,7 +64,7 @@ envWithLang.LC_ALL = 'en_US.utf8';
 
 function exec(command, opts, onErr) {
   // opts is optional
-  if(arguments.length == 2) {
+  if(arguments.length == 2 && typeof opts === 'function') {
     onErr = opts;
     opts = [];
   }
