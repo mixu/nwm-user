@@ -6,12 +6,17 @@
     "name": "Mikito Takada",
     "email": "mixu@mixu.net",
     "url": "http://blog.mixu.net/"
-    },
-  "keywords": ["nwm", "window manager", "X11"],
+  },
+  "keywords": [
+    "nwm",
+    "window manager",
+    "X11"
+  ],
   "repository": "git://github.com/mixu/nwm-user",
   "main": "index.js",
   "dependencies": {
-    "nwm": "latest"
+    "nwm": "latest",
+    "which": "~1.0.8"
   },
   "private": true
 }

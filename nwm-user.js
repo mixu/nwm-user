@@ -3,10 +3,14 @@ var wm = require('nwm');
 var NWM = wm.NWM,
     XK = wm.keysymdef,
     Xh = wm.Xh,
-    child_process = require('child_process');
+    child_process = require('child_process'),
+    which = require('which');
 
 // instantiate nwm and configure it
 var nwm = new NWM();
+
+// resolved using node-which from a preset list, see bottom of the file
+var bestAvailableTerm = 'xterm';
 
 // load layouts
 var layouts = wm.layouts;
@@ -55,8 +59,6 @@ if ( process.env.DISPLAY && process.env.DISPLAY == ':1' ) {
 
 var envWithLang = JSON.parse(JSON.stringify(process.env));
 
-console.log(envWithLang);
-
 envWithLang.LANGUAGE = 'en_US.utf8';
 envWithLang.LANG = 'en_US.utf8';
 envWithLang.LC_ALL = 'en_US.utf8';
@@ -104,9 +106,7 @@ var keyboard_shortcuts = [
     key: 'Return', // enter key launches xterm
     modifier: [ 'shift' ],
     callback: function(event) {
-      exec('sakura', function() {
-        exec('xterm');
-      });
+      exec(bestAvailableTerm);
     }
   },
   {
@@ -267,4 +267,26 @@ Repl.windows = function() {
 
 
 // START
-nwm.start(function() {});
+var terms = [
+  'sakura',
+  'rxvt',
+  'urxvt'
+  'xterm'
+];
+
+function findTerm(onDone) {
+  var name = terms.shift();
+  which(name, function(err, filepath) {
+    if (err || !filepath) {
+      findTerm(onDone);
+    } else {
+      onDone(null, name);
+    }
+  }
+}
+
+findTerm(function(err, term) {
+  bestAvailableTerm = term;
+  nwm.start(function() {});
+});
+
