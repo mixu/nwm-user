@@ -87,13 +87,33 @@ module.exports = function(dependencies) {
     {
       key: ['Left', 'Page_Up'], // meta+left and meta+right key for switching workspaces
       callback: function() {
-        currentMonitor().go('' + Math.max(0, monitor.workspaces.current - 1));
+        var monitor = currentMonitor();
+        console.log('left', Math.max(1, parseInt(monitor.workspaces.current, 10) - 1), monitor.workspaces.current);
+        monitor.go('' + Math.max(1, parseInt(monitor.workspaces.current, 10) - 1));
       }
     },
     {
       key: ['Right', 'Page_Down'], // meta Page up and meta Page down should go through the workspaces
       callback: function() {
-        currentMonitor().go('' + Math.min(9, monitor.workspaces.current + 1));
+        var monitor = currentMonitor();
+        console.log('right', Math.max(1, parseInt(monitor.workspaces.current, 10) + 1), monitor.workspaces.current);
+        monitor.go('' + Math.min(9, parseInt(monitor.workspaces.current, 10) + 1));
+      }
+    },
+    {
+      key: 'Left', // Shift + Left sends window to previous workspace
+      modifier: ['shift'],
+      callback: function() {
+        var monitor = currentMonitor();
+        monitor.windowTo(monitor.focused_window, '' + Math.max(1, parseInt(monitor.workspaces.current, 10) - 1));
+      }
+    },
+    {
+      key: 'Right', // Shift + Right sends window to next workspace
+      modifier: ['shift'],
+      callback: function() {
+        var monitor = currentMonitor();
+        monitor.windowTo(monitor.focused_window, '' + Math.min(9, parseInt(monitor.workspaces.current, 10) + 1));
       }
     },
     {

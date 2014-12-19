@@ -11,7 +11,6 @@ Customizations:
     4 windows = Fair grid
     5 = tile, 6 = grid
     ... and so on
-- I have 19 workspaces per screen (Meta + F1 .. F9 are mapped to another 9 workspaces).
 - Meta + Left / Meta + Right and Meta + PgDown / Meta + PgUp switch between workspaces (up / down)
 
 Todo / experiments todo:
@@ -27,24 +26,6 @@ Todo / experiments todo:
     -  Would make it possible to do cool composited things like taking a time and overlaying another mask like in http://www.flickr.com/photos/haiiro/5356014236/
 - Media key bindings (JS, to nplay):
     - Win + Z X C V B
-
-
-
-## Installing
-
-    # NWM
-    git clone git://github.com/mixu/nwm.git
-    cd nwm
-    node-waf clean || true && node-waf configure build
-    sudo npm link # add a global npm symlink to this repository - so nwm-user can find it (man npm link)
-    
-    # NWM-user
-    cd ..
-    git clone git://github.com/mixu/nwm-user.git
-    cd nwm-user
-    npm link nwm # now make a symlink to the nwm installation
-
-And then do whatever is needed to make your login manager start nwm-user.js
 
 ## Keyboard shortcuts
 
