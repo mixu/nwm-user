@@ -15,7 +15,6 @@
   "repository": "git://github.com/mixu/nwm-user",
   "main": "index.js",
   "dependencies": {
-    "nwm": "latest",
     "which": "~1.0.8"
   },
   "private": true
